@@ -28,7 +28,7 @@ export const Primary: Story = {
     args: {
         type: 'primary',
         label: 'Resume the game',
-        onClick: fn(),
+
         disabled: false,
         className: 'button-style',
     },
@@ -37,7 +37,6 @@ export const Secondary: Story = {
     args: {
         type: 'secondary',
         label: 'Join the game',
-        onClick: fn(),
         disabled: true,
         className: 'button-style',
     },
@@ -46,7 +45,7 @@ export const Tertiary: Story = {
     args: {
         type: 'tertiary',
         label: 'validate answer',
-        onClick: fn(),
+
         disabled: true,
         className: 'button-style',
     },
