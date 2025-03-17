@@ -1,0 +1,10 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Prend toute la hauteur de la fenêtre
+}
+
+
+.content {
+  flex: 1; // Prend tout l'espace disponible entre la navbar et le footer
+}
