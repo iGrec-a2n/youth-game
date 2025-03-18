@@ -1,18 +1,39 @@
 import { useState, useEffect } from "react";
 
-const MOBILE_BREAKPOINT = 768; 
-
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= MOBILE_BREAKPOINT);
+export function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    // Pour les navigateurs qui supportent addEventListener sur MediaQueryList
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleChange);
+    } else {
+      // Fallback pour les anciens navigateurs
+      mediaQuery.addListener(handleChange);
+    }
+
+    // Mise à jour initiale
+    setIsMobile(mediaQuery.matches);
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
   }, []);
 
   return isMobile;
 }
+
