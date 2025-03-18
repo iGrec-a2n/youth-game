@@ -1,0 +1,29 @@
+.button-style {
+    background-color: #000;
+    color: #fff;
+    padding: 15px 40px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 200;
+    text-transform: uppercase;
+
+}
+
+.primary {
+    background-color: #f9eb23;
+    color: #000;
+
+}
+
+.secondary {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+}
+
+.tertiary {
+    background-color: #f9eb23;
+    color: #000;
+}
