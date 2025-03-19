@@ -129,7 +129,9 @@ def handle_join_room(data):
     room_code = data["room_code"]
     username = data["username"]
     user_id = data["user_id"]  # Un identifiant utilisateur unique, passé lors de la connexion
-
+    if not user_id:
+        emit("error", {"message": "User not found"}, to=request.sid)
+        return
     # Trouver la room dans la base de données
     room = rooms.find_one({"room_code": room_code})
     if not room:
@@ -137,7 +139,7 @@ def handle_join_room(data):
         return
     
     # Vérifier si la room est déjà en "in progress"
-    if room.get("status") == "Wait":
+    if room.get("status") == "In progress":
         emit("error", {"message": "La room est déjà en cours, vous ne pouvez plus rejoindre."}, to=request.sid)
         return
 
@@ -205,6 +207,7 @@ def handle_join_room(data):
     )
     print("Événement 'broadcast_message' envoyé à tous les clients")
     if len(updated_room["players"]) == 2:
+        time.sleep(5)
         # Mettre la room à "in progress"
         rooms.update_one(
             {"room_code": room_code},
@@ -266,6 +269,82 @@ def receive_answer(data):
     # Identifier le joueur
     player_id = data["user_id"]
 
+    # Vérifier si le joueur existe dans la room (dans le tableau players)
+    player = next((p for p in room["players"] if str(p["user_id"]) == player_id), None)
+    if not player:
+        emit("error", {"message": "Player not found in room"}, to=request.sid)
+        return
+
+    # Récupérer la réponse de l'utilisateur
+    question_id = data["question"]
+    user_answer = data["answer"]
+    print(f"l'id de la question est {question_id}")
+
+    print(f"{player_id} a répondu {user_answer}")
+
+    # Trouver la question dans la collection 'questions' par ID
+    question = questions.find_one({"_id": ObjectId(question_id)})
+    # for i in question:
+    #     print(i["type"])
+    
+    # if not question:
+    #     emit("error", {"message": "Question not found"}, to=request.sid)
+    #     print("Question non trouvée ❌")
+    #     return
+
+    # Vérifier si la réponse est correcte
+    is_correct = question['correctAnswer'] == user_answer
+    if is_correct:
+        print("Bonne réponse ✅")
+
+        # Mettre à jour le score du joueur dans la collection 'rooms'
+        result = rooms.update_one(
+            {"room_code": room_code, "players.user_id": player_id},
+            {"$inc": {"players.$.score": question['points']}}  # Ajouter les points de la question
+        )
+        score_record = user_scores.find_one({"user_id": ObjectId(player_id)})
+
+        if score_record:
+            if is_correct:
+                # Add points for the question if the answer is correct
+                user_scores.update_one({"user_id": ObjectId(player_id)}, {"$inc": {"score": question['points']}})
+        else:
+            user_scores.insert_one({
+                "user_id": ObjectId(player_id),
+                "score": question['points'] if is_correct else 0,
+            })
+        # Récupérer le score mis à jour du joueur
+        updated_room = rooms.find_one(
+            {"room_code": room_code, "players.user_id": player_id},
+            {"players.$": 1}
+        )
+
+        if updated_room and "players" in updated_room:
+            score = updated_room["players"][0]["score"]
+            print(f"Score mis à jour : {score} ✅")
+
+            # Envoyer le score uniquement au joueur qui a répondu
+            emit("score_updated", {"user_id": player_id, "new_score": score}, to=request.sid)
+        else:
+            print("Erreur lors de la récupération du score ❌")
+            emit("error", {"message": "Score not found"}, to=request.sid)
+
+    else:
+        print("Mauvaise réponse ❌")
+        emit("error", {"message": "Incorrect answer"}, to=request.sid)
+
+    # Identifier la room
+    room_code = data['room_code']
+
+    # Vérifier si la room existe
+    room = rooms.find_one({"room_code": room_code})
+    if not room:
+        emit("error", {"message": "Room not found"}, to=request.sid)
+        return
+
+    # Identifier le joueur
+    player_id = data["user_id"]
+
     # Vérifier si le joueur existe
     user = users.find_one({"_id": ObjectId(player_id)})
     if not user:
@@ -313,9 +392,7 @@ def receive_answer(data):
 
         else:
             print("Mauvaise réponse ❌")
-    else:
-        emit("error", {"message": "Question not found"}, to=request.sid)
-        print("Question non trouvée ❌")
+
 
 @socketio.on('end_room')
 def end_room(data):

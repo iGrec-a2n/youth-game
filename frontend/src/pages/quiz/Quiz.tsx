@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import socket from "../../utils/socket";  
 
@@ -69,6 +68,7 @@ const Quiz = () => {
 
   const Send_answer = (answer: string) => {
     socket.emit('receive_answer', {
+      user_id: localStorage.getItem('user_id'),
       room_code: roomCode,
       question: questions[currentQuestion]._id,
       answer: answer 
