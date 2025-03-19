@@ -32,20 +32,27 @@ const LoginPage: React.FC = () => {
   // };
 
 
-const onSubmit = async (data: LoginFormInputs) => {
-  try {
-    const response = await axios.post("http://127.0.0.1:5000/api/register", data, {
-      headers: { "Content-Type": "application/json" },
-    });
-
-    console.log("Réponse du backend :", response.data);
-    alert(response.data.message); // Affichage d'un message
-  } catch (error) {
-    console.error("Erreur lors de la connexion :", error);
-    alert("Erreur de connexion !");
-  }
-};
-
+  const onSubmit = async (data: LoginFormInputs) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/api/register", data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log(data);
+      console.log("Réponse du backend :", response.data);
+      alert(response.data.message); // Affichage d'un message
+    } catch (error) {
+      if (error.response) {
+        // L'erreur provient du backend
+        console.error("Erreur du backend :", error.response.data);
+        alert(error.response.data.message || "Erreur inconnue");
+      } else {
+        // L'erreur est côté client (par exemple, problème de réseau)
+        console.error("Erreur de connexion :", error);
+        alert("Erreur de connexion !");
+      }
+    }
+  };
+  
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-lg w-96">
