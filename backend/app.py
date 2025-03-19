@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -9,7 +11,6 @@ import random
 import string
 import time
 # For WebSocket connections to work well in local mode
-eventlet.monkey_patch()
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:5173'])
