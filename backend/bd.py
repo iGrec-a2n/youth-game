@@ -13,6 +13,12 @@ else:
 # creation DB
 client = MongoClient("localhost:27017")
 db = client["HACKATON_Hetic"]
+# db['rooms'].update_one(
+#     {"room_code": "VGQZCN"},  # Filtre pour identifier le bon document
+#     {"$set": {"players": []}}  # Mise à jour du champ "players" pour le vider
+# )
+
+# print("Les joueurs ont été supprimés.")
 # users = db["Users"]
 # user_scores = db["Score"]
 # # creation collection

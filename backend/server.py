@@ -24,7 +24,8 @@ users = db["Users"]
 
 # Collection pour les scores des joueurs
 user_scores = db["Score"]
-
+#collection pour les questions
+questions = db["questions"]
 # Nb de participants à une room
 room_players = {}
 
@@ -36,13 +37,16 @@ def generate_room_code():
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
-    last_name = data.get("lastName")
-    first_name = data.get("firstName")
-    username = data.get("username")
-    email = data.get('email')
-    password = data.get('password')
+    print(data)
+    last_name = data["lastName"]
+    first_name = data["firstName"]
+    username = data["username"]
+    email = data['email']
+    password = data['password']
     hashed_password = generate_password_hash(password)
-    country = data.get('country')
+    country = data['country']
+    birthdate = data['birthDate']
+    print("ok")
     # Vérifier si l'utilisateur existe déjà
     if users.find_one({"email": email}):
         return jsonify({"message": "User already exists"}), 400
@@ -54,7 +58,8 @@ def register():
             "username": username,
             "email": email,
             "password": hashed_password,
-            "country": country
+            "country": country,
+            "birthdate": birthdate
         })
         return jsonify({"message": "New user registered successfully"}), 200
     else:
@@ -132,7 +137,7 @@ def handle_join_room(data):
         return
     
     # Vérifier si la room est déjà en "in progress"
-    if room.get("status") == "In progress":
+    if room.get("status") == "Wait":
         emit("error", {"message": "La room est déjà en cours, vous ne pouvez plus rejoindre."}, to=request.sid)
         return
 
@@ -199,6 +204,30 @@ def handle_join_room(data):
         broadcast=True  # Émettre à tous les clients connectés
     )
     print("Événement 'broadcast_message' envoyé à tous les clients")
+    if len(updated_room["players"]) == 2:
+        # Mettre la room à "in progress"
+        rooms.update_one(
+            {"room_code": room_code},
+            {"$set": {"status": "In progress"}}
+        )
+
+        # Récupérer les questions de type multipleChoice
+        question_list = []
+        qcm = questions.find({"type": "multipleChoice"})
+        for q in qcm:
+            question_list.append({
+                "_id": str(q["_id"]),
+                "question": q["question"],
+                "options": q["options"],
+                "points": q["points"]
+            })
+
+        # Envoyer les questions aux joueurs dans la room
+        emit("quiz_started", {"questions": question_list}, room=room_code)
+
+        # Diffuser à tous les clients que le quiz a commencé
+        emit("room_status", {"room_code": room_code, "status": "in progress"}, broadcast=True)
+        print(f"Le quiz pour la room {room_code} a commencé avec les questions : {question_list}")
 
 # 🔄 Envoyer une question à la room
 @socketio.on("start_quiz")
