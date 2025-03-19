@@ -123,6 +123,50 @@ def get_room_questions():
 
     return jsonify({"questions": room["questions"]}), 200
 
+#Route pour les classements
+@app.route('/ranking', methods=['GET'])
+def ranking():
+    try:
+        # Récupérer le pays depuis les paramètres de la requête 
+        country = request.args.get("country")
+        user_filter = {}  # Par défaut, aucun filtre 
+        if country:
+            user_filter["country"] = country  # On filtre par pays si un country est fourni si le front l'a fourni en paramètre
+
+        # Récupérer tous les utilisateurs correspondant au filtre
+        matching_users = users.find(user_filter)
+
+        user_ids = {user["_id"] for user in matching_users}
+
+        # Récupérer les scores en filtrant par ces IDs
+        scores_filter = {} if not country else {"user_id": {"$in": list(user_ids)}}
+        scores = user_scores.find(scores_filter).sort("score", -1)
+
+        ranking_list = []
+
+        for score_doc in scores:
+            user_id = str(score_doc["user_id"])
+            score = score_doc.get("score", 0)
+
+            # Récupérer les informations utilisateur
+            user = users.find_one({"_id": score_doc["user_id"]})
+
+            ranking_list.append({
+                "user_id": user_id,
+                "pseudo": user["username"] if user else "Inconnu",
+                "country": user["country"] if user else "N/A",
+                "score": score
+            })
+
+        # Définir un titre en fonction du filtre appliqué
+        ranking_title = "International Ranking" if not country else f"Ranking for {country}"
+
+        return jsonify({"title": ranking_title, "ranking": ranking_list}), 200
+
+    except Exception as e:
+        return jsonify({"error": "Une erreur est survenue", "details": str(e)}), 500
+
+
 
 @socketio.on("join_room")
 def handle_join_room(data):
