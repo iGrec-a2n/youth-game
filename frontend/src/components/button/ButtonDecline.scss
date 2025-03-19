@@ -1,3 +1,5 @@
+@use '../../assets/styles/variable.scss' as c;
+
 .button-style {
     background-color: #000;
     color: #fff;
@@ -9,6 +11,7 @@
     font-weight: 200;
     text-transform: uppercase;
     width: 250px;
+    font-family: c.$font-noto;
 
 }
 

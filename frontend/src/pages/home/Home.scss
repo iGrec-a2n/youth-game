@@ -1,3 +1,5 @@
+@use '../../assets//styles/variable.scss' as c;
+
 // colors 
 $russian-violet: #140044ff;
 $citrine: #e8c822ff;
@@ -31,7 +33,7 @@ $russian-violet-2: #100736ff;
         }
 
         .title {
-            font-family: 'Noto sans';
+            font-family:c.$font-noto;
             font-size: 1.2rem;
             font-weight: 200;
             margin: 0;
@@ -47,7 +49,7 @@ $russian-violet-2: #100736ff;
         }
 
         .title-large {
-            font-family: 'Syncopate';
+            font-family:c.$font-syncopate;
             font-weight: 800;
             font-size: 2rem;
         }
@@ -87,3 +89,5 @@ $russian-violet-2: #100736ff;
         }
     }
 }
+
+
