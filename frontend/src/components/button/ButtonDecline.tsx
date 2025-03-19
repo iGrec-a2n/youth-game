@@ -5,16 +5,16 @@ interface ButtonProps {
 
     type: 'primary' | 'secondary' | 'tertiary';
     label: string;
-    onClick: () => void;
+
     className?: string;
     disabled?: boolean;
 
 }
 
-export const ButtonDecline: React.FC<ButtonProps> = ({ label, onClick, className, type, disabled }) => {
+export const ButtonDecline: React.FC<ButtonProps> = ({ label, className, type, disabled }) => {
 
     return (
-        <button className={`button-style ${className}  ${type}`} onClick={onClick} disabled={disabled}>
+        <button className={`button-style ${className}  ${type}`} disabled={disabled}>
             {label}
         </button>
     )

@@ -161,7 +161,8 @@ def handle_join_room(data):
         "username": username,
         "user_id": user_id, 
         "joined_at": time.time(), # Date et heure d'entrée 'pas encore convertie'
-        "score": 0
+        "score": 0,
+        "finished": False
     }
 
     # Mettre à jour la collection 'rooms' pour ajouter ce joueur à la room
@@ -394,6 +395,33 @@ def receive_answer(data):
             print("Mauvaise réponse ❌")
 
 
+@socketio.on('player_finished')
+def player_finished(data):
+    print(" @@@@@@@@@@@@   Joueur fini")
+    room_code = data["room_code"]
+    user_id = data["user_id"]
+
+    # Trouver la room
+    room = rooms.find_one({"room_code": room_code})
+    if not room:
+        emit("error", {"message": "Room not found"})
+        return
+
+    # Mettre à jour l'état du joueur
+    for player in room["players"]:
+        if player["user_id"] == user_id:
+            player["finished"] = True  # Marquer ce joueur comme ayant terminé
+
+    # Sauvegarder la mise à jour dans MongoDB
+    rooms.update_one({"room_code": room_code}, {"$set": {"players": room["players"]}})
+
+    # Vérifier si TOUS les joueurs ont terminé
+    all_finished = all(player.get("finished", False) for player in room["players"])
+
+    if all_finished:
+        print("###########  Joueurs fini")
+        end_room({"room_code": room_code})  # Déclencher la fin du jeu
+
 @socketio.on('end_room')
 def end_room(data):
     room_code = data["room_code"]
@@ -405,16 +433,12 @@ def end_room(data):
         return
 
     # Récupérer les scores des joueurs
-    players = room["players"]  # Liste des joueurs dans la room
-    if not players:
-        emit("error", {"message": "No players found in this room"})
-        return
+    players = room["players"]
+    player_scores = [{"username": p["username"], "score": p["score"]} for p in players]
 
-    # Construire une liste avec les scores des joueurs
-    player_scores = [{"username": player["username"], "score": player["score"]} for player in players]
-
-    # Émettre l'événement 'end_room' avec les scores des joueurs
+    # Émettre l'événement de fin de jeu à tous les joueurs
     emit("end_room", {"player_scores": player_scores}, room=room_code)
 
+    print(f"🏁 Fin de la room {room_code} - Scores : {player_scores}")
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)

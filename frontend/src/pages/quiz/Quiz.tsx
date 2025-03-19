@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import socket from "../../utils/socket";  
+import AnswerTimer from "../../components/AnswerTimer/AnswerTimer";
+
 
 interface Question {
   _id: string;
@@ -53,7 +55,7 @@ const Quiz = () => {
     });
   
     socket.on("error", (data: { message: string }) => {
-      alert(data.message);
+      console.log(data.message);
     });
   
     return () => {
@@ -65,13 +67,26 @@ const Quiz = () => {
     };
   }, []);
   
+  useEffect(() => {
+    // Écouter l'événement de fin de la room
+    socket.on("end_room", (data) => {
+      console.log("🏁 Fin du jeu !", data);
+      alert("Le jeu est terminé ! Voici les scores : " + JSON.stringify(data.player_scores));
+    });
+  
+    return () => {
+      socket.off("end_room");
+    };
+  }, []);
 
   const Send_answer = (answer: string) => {
+    console.log(answer);
     socket.emit('receive_answer', {
       user_id: localStorage.getItem('user_id'),
       room_code: roomCode,
       question: questions[currentQuestion]._id,
-      answer: answer 
+      answer: answer,
+      // point:  
     });
 
     // ✅ Passer immédiatement à la question suivante
@@ -79,6 +94,7 @@ const Quiz = () => {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setIsFinished(true); // ✅ Fin du quiz
+      socket.emit("player_finished", { room_code: roomCode, user_id: localStorage.getItem("user_id") });
     }
   };
 
@@ -104,6 +120,7 @@ const Quiz = () => {
           <h3>{questions[currentQuestion]?.question}</h3>
           {questions[currentQuestion]?.options.map((option: string, index: number) => (
             <div key={index}>
+              {/* <AnswerTimer duration={15} onTimeUp={() => Send_answer(option)} /> */}
               <button type="button" onClick={() => Send_answer(option)}>
                 {option}
               </button>

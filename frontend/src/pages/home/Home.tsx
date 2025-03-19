@@ -1,14 +1,10 @@
-import { useNavigate } from "react-router";
+import { NavLink } from "react-router";
 import "./Home.scss"
 import { Background } from "../../components/background/Background";
 import { ButtonDecline } from "../../components/button/ButtonDecline";
 
 export const Home: React.FC = () => {
-    const navigate = useNavigate();
 
-    const handleNavigate = () => {
-        navigate("/login");
-    }
 
     return (
         <section>
@@ -26,8 +22,13 @@ export const Home: React.FC = () => {
                     </span>
                 </h1>
                 <div className="button-section">
-                    <ButtonDecline label="resume the game" onClick={handleNavigate} type="primary" />
-                    <ButtonDecline label="Discover" onClick={handleNavigate} type="secondary" />
+                    <NavLink to="/Signin">
+                        <ButtonDecline label="resume the game"  type="primary" />
+                    </NavLink>
+                    
+                    <NavLink to="/Signup">
+                        <ButtonDecline label="Discover" type="secondary" />
+                    </NavLink>
                 </div>
             </div>
         </section>

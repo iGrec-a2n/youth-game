@@ -18,16 +18,16 @@ const mobileRouter = createBrowserRouter([
   },
 
   {
-    path: "/Quiz",
+    path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Quiz /> },
+      { path:"/Admin", element: <Admin />},
+      { path:"/Signin", element: <Signin />},
+      { path:"/Signup", element: <Signup />},
+      { path:"/join", element: <JoinRoom />},
+      { path: "/Quiz", element: <Quiz /> },
     ],
   },
-  { path:"/Admin", element: <Admin />},
-  { path:"/Signin", element: <Signin />},
-  { path:"/Signup", element: <Signup />},
-  { path:"/join", element: <JoinRoom />},
   { path: "*", element: <Notfound /> },
 ]);
 
