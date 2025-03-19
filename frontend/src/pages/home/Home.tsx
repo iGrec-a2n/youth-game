@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { NavLink } from "react-router";
 import "./Home.scss"
 import { Background } from "../../components/background/Background";
 import { ButtonDecline } from "../../components/button/ButtonDecline";
