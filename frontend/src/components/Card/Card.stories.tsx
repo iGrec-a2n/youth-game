@@ -30,8 +30,8 @@ export const Default: StoryObj<typeof Card> = {
 export const User: StoryObj<typeof Card> = {
     args: {
         image: "https://images.pexels.com/photos/1441151/pexels-photo-1441151.jpeg?auto=compress&cs=tinysrgb&w=1200",
-        name: "Name",
-        location: "LOCATION",
+        name: "Yann",
+        location: "munich",
         score: 0,
         rank: 100,
     }

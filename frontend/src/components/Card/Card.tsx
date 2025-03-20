@@ -38,3 +38,5 @@ const Card: React.FC<CardProps> = ({ image, name, location, score, rank }) => {
 }
 
 export default Card;
+
+

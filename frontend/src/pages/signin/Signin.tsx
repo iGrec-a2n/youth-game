@@ -5,7 +5,7 @@ import "./Signin.scss"
 import { ButtonDecline } from '../../components/button/ButtonDecline';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../utils/context/UserContext';
-
+import Card from '../../components/Card/Card';
 const Signin: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -72,6 +72,7 @@ const Signin: React.FC = () => {
           <ButtonDecline type='primary' label='Se Connecter' />
       </form>
       {message && <p>{message}</p>}
+      
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
 import socket from "../../utils/socket";
-import { useUser } from "../../utils/context/UserContext";
+import { useUser } from "../../utils/context/UserContext"; // Importer le contexte utilisateur
+import Card from "../Card/Card";
 import "./join.scss"
 
 const JoinRoom: React.FC = () => {
@@ -32,7 +33,7 @@ const JoinRoom: React.FC = () => {
       setPlayers((prev) => {
         const updatedPlayers = [...prev, data.username];
         console.log("Liste mise à jour des joueurs : ", updatedPlayers);
-        return updatedPlayers;
+        return updatedPlayers;                      
       });
     });
   
@@ -42,6 +43,11 @@ const JoinRoom: React.FC = () => {
   }, [players]);
   return (
     <div className="select-room-container">
+      <Card image="https://images.pexels.com/photos/30736845/pexels-photo-30736845/free-photo-of-homme-pensif-appuye-sur-un-escalier-a-l-interieur.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load" 
+      name="Antoine" 
+      location="Paris" 
+      score={12000} 
+      rank={1} />
       <h2>Rejoindre une salle</h2>
       <button onClick={joinRoom}>Rejoindre</button>
     </div>
