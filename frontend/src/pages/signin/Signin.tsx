@@ -32,7 +32,7 @@ const Signin: React.FC = () => {
 
       if (response.status === 200) {
         // Enregistrer l'ID de l'utilisateur dans localStorage
-        localStorage.setItem('user', JSON.stringify(response.data.data));
+        localStorage.setItem('user_id', response.data.user_id);
 
         // Rediriger vers la page du quiz
         navigate('/join');

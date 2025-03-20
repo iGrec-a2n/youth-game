@@ -10,6 +10,7 @@ from bson import ObjectId
 import random
 import string
 import time
+import random
 # For WebSocket connections to work well in local mode
 
 app = Flask(__name__)
@@ -21,6 +22,9 @@ rooms = db["rooms"]
 
 # Collection pour les utilisateurs
 users = db["Users"]
+
+#collections pour les actualités
+actualities = db["actualities"]
 
 # Collection pour les scores des joueurs
 user_scores = db["Score"]
@@ -59,7 +63,8 @@ def register():
             "email": email,
             "password": hashed_password,
             "country": country,
-            "birthdate": birthdate
+            "birthdate": birthdate,
+            "streak" : 0
         })
         return jsonify({"message": "New user registered successfully"}), 200
     else:
@@ -87,6 +92,109 @@ def signIN():
     else:
         return jsonify({"message": "User not found"}), 400
 
+#route pour envoyer l'evolution de l'utilisateur
+@app.route('/user_ranking', methods=['GET'])
+def user_ranking():
+    try:
+        # Récupérer le user_id depuis les paramètres de la requête
+        user_id = request.args.get("user_id")
+        
+        if not user_id:
+            return jsonify({"error": "User ID is required"}), 400
+        
+        # Trouver l'utilisateur par son ID
+        user = users.find_one({"_id": ObjectId(user_id)})
+        
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Récupérer le pays de l'utilisateur
+        country = user["country"]
+        
+        # Récupérer tous les utilisateurs de ce pays
+        matching_users = users.find({"country": country})
+        
+        user_ids = {user["_id"] for user in matching_users}
+        
+        # Récupérer les scores des utilisateurs de ce pays
+        scores = user_scores.find({"user_id": {"$in": list(user_ids)}}).sort("score", -1)
+        
+        # Calculer le classement de l'utilisateur
+        ranking_list = []
+        user_score = None
+        rank = 1
+
+        for score_doc in scores:
+            current_user_id = str(score_doc["user_id"])
+            score = score_doc.get("score", 0)
+
+            # Récupérer les informations utilisateur
+            user_data = users.find_one({"_id": score_doc["user_id"]})
+
+            if user_data:
+                user_info = {
+                    "user_id": current_user_id,
+                    "pseudo": user_data["username"],
+                    "country": user_data["country"],
+                    "score": score,
+                    "streak" : user_data["streak"]
+                }
+
+                ranking_list.append(user_info)
+                
+                # Si c'est l'utilisateur recherché, récupérer son score et son classement
+                if current_user_id == user_id:
+                    user_score = score
+                    break  # On s'arrête dès qu'on trouve l'utilisateur
+
+            rank += 1
+        
+        if not user_score:
+            return jsonify({"error": "Score not found for this user"}), 404
+
+        # Calculer le classement de l'utilisateur
+        user_ranking = next((index + 1 for index, item in enumerate(ranking_list) if item["user_id"] == user_id), None)
+
+        return jsonify({
+            "user_score": user_score,
+            "user_ranking": user_ranking,
+            "ranking": ranking_list,
+            "streak" : user_data["streak"]
+
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
+#route pour les actualités
+
+@app.route('/random_actuality', methods=['GET'])
+def get_random_actuality():
+    try:
+        # Compter le nombre total de documents
+        count = actualities.count_documents({})
+        
+        if count == 0:
+            return jsonify({"error": "No actualities found"}), 404
+        
+        # Sélectionner un index aléatoire
+        random_index = random.randint(0, count - 1)
+        
+        # Récupérer un document aléatoire en utilisant skip()
+        random_actuality = actualities.find().limit(1).skip(random_index).next()
+        
+        # Construire la réponse avec uniquement les champs nécessaires
+        response = {
+            "titre": random_actuality["titre"],
+            "contenu": random_actuality["contenu"],
+            "source": random_actuality["source"],
+            "date": random_actuality["date"]
+        }
+
+        return jsonify(response), 200
+    
+    except Exception as e:
+        return jsonify({"error": "An error occurred", "details": str(e)}), 500
 
 
 # Route pour créer une room avec des questions
@@ -213,7 +321,7 @@ def handle_join_room(data):
     player = {
         "username": username,
         "user_id": user_id, 
-        "joined_at": time.time(), # Date et heure d'entrée 'pas encore convertie'
+        "joined_at": time.time(),
         "score": 0,
         "finished": False
     }
@@ -501,7 +609,7 @@ def end_room(data):
             user_id = user["_id"]
             last_date = float(user.get("last_date", 0))  # Si non défini, 0
             last_bonus = float(user.get("last_bonus_timestamp", 0))  # Si non défini, 0
-
+            streak = int(user.get("streak", 0))
             # Convertir en jours
             last_played_day = int(last_date // 86400)
             last_bonus_day = int(last_bonus // 86400)
@@ -512,11 +620,11 @@ def end_room(data):
                 bonus = max(1, 10 - int(time_diff // 3600))  # Calcul du bonus
                 player_score += bonus
                 print(f"🎯 Bonus appliqué pour {username}: +{bonus} points !")
-
+                streak += 1
                 # Enregistrer la date du dernier bonus donné
                 users.update_one(
                     {"_id": user_id},
-                    {"$set": {"last_bonus_timestamp": current_time}}
+                    {"$set": {"last_bonus_timestamp": current_time, "streak":streak}}
                 )
 
             # Mise à jour de la dernière date de jeu
