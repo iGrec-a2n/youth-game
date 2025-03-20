@@ -1,89 +1,86 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { InputPassword, InputText } from "../../components/input/Input";
 
-// Définition du schéma de validation avec Zod
-const loginSchema = z.object({
+// Schéma de validation avec Zod
+const signupSchema = z.object({
   lastName: z.string().min(1, "Le nom est requis"),
   firstName: z.string().min(1, "Le prénom est requis"),
   username: z.string().min(3, "Le pseudo doit avoir au moins 3 caractères"),
   email: z.string().email("Email invalide"),
   password: z.string().min(6, "Le mot de passe doit avoir au moins 6 caractères"),
+  confirmPassword: z.string().min(6, "La confirmation est requise"),
   country: z.string().min(1, "Le pays est requis"),
   birthDate: z.string().min(1, "La date de naissance est requise"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Les mots de passe ne correspondent pas",
+  path: ["confirmPassword"],
 });
 
-// Définition du type des données du formulaire
-type LoginFormInputs = z.infer<typeof loginSchema>;
+// Type des données du formulaire
+type SignupFormInputs = z.infer<typeof signupSchema>;
 
-const LoginPage: React.FC = () => {
+const Signup: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormInputs>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<SignupFormInputs>({
+    resolver: zodResolver(signupSchema),
   });
 
-  // const onSubmit = (data: LoginFormInputs) => {
-  //   console.log("Données du formulaire :", data);
-  // };
-
-
-  const onSubmit = async (data: LoginFormInputs) => {
+  const onSubmit = async (data: SignupFormInputs) => {
     try {
       const response = await axios.post("http://127.0.0.1:5000/api/register", data, {
         headers: { "Content-Type": "application/json" },
       });
-      console.log(data);
-      console.log("Réponse du backend :", response.data);
-      alert(response.data.message); // Affichage d'un message
-    } catch (error) {
-      if (error.response) {
-        // L'erreur provient du backend
-        console.error("Erreur du backend :", error.response.data);
-        alert(error.response.data.message || "Erreur inconnue");
-      } else {
-        // L'erreur est côté client (par exemple, problème de réseau)
-        console.error("Erreur de connexion :", error);
-        alert("Erreur de connexion !");
-      }
+      alert(response.data.message);
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError;
+      console.error("Erreur lors de l'inscription :", axiosError);
+      const errorMessage = (axiosError.response?.data as { message?: string })?.message || "Erreur de connexion.";
+      console.log(errorMessage);
     }
   };
-  
+
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">Connexion</h2>
-        
-        <label className="block">Nom :</label>
-        <input {...register("lastName")} className="w-full p-2 border rounded mb-2" />
+        <h2 className="text-2xl font-semibold text-center mb-4">Inscription</h2>
+
+        <label>Nom :</label>
+        <InputText {...register("lastName")} placeholder="Nom" type="text" required />
         {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
 
-        <label className="block">Prénoms :</label>
-        <input {...register("firstName")} className="w-full p-2 border rounded mb-2" />
+        <label>Prénom :</label>
+        <InputText {...register("firstName")} placeholder="Prénom" type="text" required />
         {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
 
-        <label className="block">Pseudo :</label>
-        <input {...register("username")} className="w-full p-2 border rounded mb-2" />
+        <label>Pseudo :</label>
+        <InputText {...register("username")} placeholder="Pseudo" type="text" required />
         {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
 
-        <label className="block">Email :</label>
-        <input type="email" {...register("email")} className="w-full p-2 border rounded mb-2" />
+        <label>Email :</label>
+        <InputText type="email" {...register("email")} placeholder="Email" required />
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
-        <label className="block">Mot de passe :</label>
-        <input type="password" {...register("password")} className="w-full p-2 border rounded mb-2" />
+        <label>Mot de passe :</label>
+        <InputPassword {...register("password")} placeholder="Mot de passe" required />
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
-        <label className="block">Pays :</label>
-        <input {...register("country")} className="w-full p-2 border rounded mb-2" />
+        <label>Confirmer le mot de passe :</label>
+        <InputPassword {...register("confirmPassword")} placeholder="Confirmer le mot de passe" required />
+        {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+
+        <label>Pays :</label>
+        <InputText {...register("country")} placeholder="Pays" type="text" required />
         {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
 
-        <label className="block">Date de naissance :</label>
-        <input type="date" {...register("birthDate")} className="w-full p-2 border rounded mb-2" />
+        <label>Date de naissance :</label>
+        <InputText type="date" {...register("birthDate")} placeholder="Date de naissance" required />
         {errors.birthDate && <p className="text-red-500 text-sm">{errors.birthDate.message}</p>}
 
         <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600">
@@ -94,4 +91,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default Signup;
