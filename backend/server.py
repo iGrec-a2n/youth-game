@@ -137,7 +137,7 @@ def user_ranking():
                     "pseudo": user_data["username"],
                     "country": user_data["country"],
                     "score": score,
-                    "streak" : user_data["streak"]
+                    # "streak" : user_data["streak"]
                 }
 
                 ranking_list.append(user_info)
@@ -159,7 +159,7 @@ def user_ranking():
             "user_score": user_score,
             "user_ranking": user_ranking,
             "ranking": ranking_list,
-            "streak" : user_data["streak"]
+            # "streak" : user_data["streak"]
 
         }), 200
 
@@ -369,12 +369,10 @@ def handle_join_room(data):
     )
     print("Événement 'broadcast_message' envoyé à tous les clients")
     if len(updated_room["players"]) == 2:
-        time.sleep(5)
-        # Mettre la room à "in progress"
-        rooms.update_one(
-            {"room_code": room_code},
-            {"$set": {"status": "In progress"}}
-        )
+        for i in range(5, 0, -1):  # Décompte de 5 à 1
+            emit("countdown", {"count": i}, room=room_code)
+            time.sleep(1)  # Pause d'une seconde entre chaque envoi
+
 
         # Récupérer les questions de type multipleChoice
         question_list = []
