@@ -1,23 +1,23 @@
-@import '../../assets/styles/variable.scss';
+@use '../../assets/styles/variable.scss' as c;
 .signin-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 80vh;
   max-height: 100vh;
-  background-color: $background-color;
-  font-family: $font-noto;
+  background-color: c.$background-color;
+  font-family: c.$font-noto;
   
   form {
-    background-color: $form-background;
+    background-color: c.$form-background;
     padding: 2rem;
-    border-radius: $border-radius;
-    box-shadow: 0 4px 6px $shadow-light;
+    border-radius: c.$border-radius;
+    box-shadow: 0 4px 6px c.$shadow-light;
     width: 100%;
     max-width: 400px;
     
       h2 {
-        font-family: $font-syncopate;
+        font-family: c.$font-syncopate;
         text-align: center;
         font-size: 1.8rem;
         font-stretch: expanded;
@@ -35,13 +35,13 @@
   input {
     width: 100%;
     padding: 10px;
-    border: 1px solid $border-color;
+    border: 1px solid c.$border-color;
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
 
     &:focus {
-      border-color: $primary-color;
+      border-color: c.$primary-color;
       outline: none;
     }
   }
@@ -58,7 +58,7 @@
       position: absolute;
       right: 10px;
       font-size: 1.2rem;
-      color: $slate-gray;
+      color: c.$slate-gray;
       transition: transfrom 0.3s ease;
 
       &:hover {
@@ -70,7 +70,7 @@
     margin: 1rem auto;
 
     &:hover {
-      color: $charcoal;
+      color: c.$charcoal;
     }
   }
 }
