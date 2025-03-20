@@ -8,13 +8,13 @@ const Layout = () => {
 
     return (
 
-      <div className="view">
+    <div className="view">
       <Navbar />
-            <main className="content">
-                <Outlet /> {/* Affiche la page sélectionnée */}
-            </main>
-            <Footer />
-      </div>
+      <main className="content">
+        <Outlet />
+      </main>
+      <Footer />
+  </div>
 
         
             

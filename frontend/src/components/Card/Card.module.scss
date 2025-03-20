@@ -1,0 +1,92 @@
+
+
+.Card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 325px;
+    gap: 30px;
+    border-radius: 15px;
+    background: #C0B6FC;
+    align-items: flex-start;
+
+}
+
+.CardId {
+    display: flex;
+    gap: 52px;
+    align-items: center;
+}
+
+.CardImage {
+    position: relative;
+    width: 63px;
+    height: 63px;
+    aspect-ratio: 1/1;
+}
+
+.PhotoProfil {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+.CardInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.CardNames {
+    
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.CardLocation {
+    
+    font-size: 10px;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.CardStats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+
+.score {
+    display: flex;
+    width: 130px;
+    height: 45px;
+    justify-content: center;
+    align-items: center;
+    /* gap: 30px; */
+    border-radius: 6px;
+    background: #FFF;
+}
+
+.rank {
+    display: flex;
+    width: 130px;
+    height: 45px;
+    justify-content: center;
+    align-items: center;
+    /* gap: 30px; */
+    border-radius: 6px;
+    background: #FFF;
+}
+
+.p {
+    
+    font-size: 12px;
+}
