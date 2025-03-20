@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import socket from "../../utils/socket";  
+import { useUser } from "../../utils/context/UserContext";
 // import AnswerTimer from "../../components/AnswerTimer/AnswerTimer";
 
 
@@ -24,6 +25,7 @@ const Quiz = () => {
   const [player, setPlayer] = useState<string>('');
   const [isFinished, setIsFinished] = useState(false); 
   const [finalScores, setFinalScores] = useState<PlayerScore[]>([]); 
+  const {user} = useUser();
 
   useEffect(() => {
     socket.on("quiz_started", (data: { questions: Question[] }) => {
@@ -37,7 +39,7 @@ const Quiz = () => {
     });
   
     socket.on("score_updated", (data) => {
-      if (data.user_id === localStorage.getItem('user_id')) {
+      if (data.user_id === user?.user_id) {
         console.log(data.new_score);
         
         setScore(data.new_score);
@@ -82,7 +84,7 @@ const Quiz = () => {
   const Send_answer = (answer: string) => {
     console.log(answer);
     socket.emit('receive_answer', {
-      user_id: localStorage.getItem('user_id'),
+      user_id: user?.user_id,
       room_code: roomCode,
       question: questions[currentQuestion]._id,
       answer: answer,
@@ -94,7 +96,7 @@ const Quiz = () => {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setIsFinished(true); // ✅ Fin du quiz
-      socket.emit("player_finished", { room_code: roomCode, user_id: localStorage.getItem("user_id") });
+      socket.emit("player_finished", { room_code: roomCode, user_id: user?.user_id });
     }
   };
 

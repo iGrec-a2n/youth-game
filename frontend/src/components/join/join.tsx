@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
 import socket from "../../utils/socket";
-import { useUser } from "../../utils/context/UserContext"; // Importer le contexte utilisateur
+import { useUser } from "../../utils/context/UserContext";
+import "./join.scss"
 
 const JoinRoom: React.FC = () => {
   const roomCode = "VGQZCN";
@@ -40,7 +41,7 @@ const JoinRoom: React.FC = () => {
     };
   }, [players]);
   return (
-    <div>
+    <div className="select-room-container">
       <h2>Rejoindre une salle</h2>
       <button onClick={joinRoom}>Rejoindre</button>
     </div>

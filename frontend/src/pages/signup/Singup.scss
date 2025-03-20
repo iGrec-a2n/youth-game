@@ -2,9 +2,9 @@
 .signup-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  // align-items: center;
   height: 100%;
-  max-height: 100vh;
+  max-height: calc(100vh - 110px);
   background-color: c.$background-color;
   font-family: c.$font-noto;
 
@@ -15,6 +15,7 @@
     box-shadow: 0 4px 6px c.$shadow-light;
     width: 100%;
     max-width: 400px;
+    overflow: scroll;
 
     h2 {
       font-family: c.$font-syncopate;
@@ -29,7 +30,7 @@
       display: block;
       font-size: 0.9rem;
       font-weight: 600;
-      margin-bottom: 0.3rem;
+      margin: 1rem 0 .5rem;
     }
 
     input {

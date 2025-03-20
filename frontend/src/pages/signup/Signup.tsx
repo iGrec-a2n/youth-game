@@ -36,7 +36,7 @@ const Signup: React.FC = () => {
 
   const onSubmit = async (data: SignupFormInputs) => {
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/register", data, {
+      const response = await axios.post("https://8cb7-2a04-cec0-193b-e9df-e987-719b-684e-2a4a.ngrok-free.app/api/register", data, {
         headers: { "Content-Type": "application/json" },
       });
       alert(response.data.message);
@@ -78,6 +78,7 @@ const Signup: React.FC = () => {
         {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
 
         <div className="relative">
+          <label>Pays :</label>
           <select {...register("country")} className="w-full p-2 border rounded">
             <option value="">Sélectionnez votre pays</option>
             {euCountries.map((country) => (

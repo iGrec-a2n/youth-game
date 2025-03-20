@@ -18,7 +18,7 @@ const Signin: React.FC = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/login', {
+      const response = await axios.post('https://8cb7-2a04-cec0-193b-e9df-e987-719b-684e-2a4a.ngrok-free.app/api/login', {
         email,
         password,
       }, {
@@ -33,7 +33,6 @@ const Signin: React.FC = () => {
         setUser(userData); // Met à jour le contexte utilisateur
         // Enregistrer l'ID de l'utilisateur dans localStorage
         localStorage.setItem('user', JSON.stringify(user));
-        console.log((localStorage.getItem("user")));
         // Rediriger vers la page du quiz
         navigate('/join');
       }

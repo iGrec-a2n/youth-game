@@ -24,33 +24,32 @@
         font-weight: 600;
         margin-bottom: 1.5rem;
       }
-  }
-  label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin: 1.3rem 0 0.3rem;
-  }
-
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid c.$border-color;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-
-    &:focus {
-      border-color: c.$primary-color;
-      outline: none;
-    }
-  }
-
+      label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 1.5rem 0;
+      }
+  
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid c.$border-color;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        
+        &:focus {
+          border-color: c.$primary-color;
+          outline: none;
+        }
+      }
+  
   input[type="password"] {
     display: flex;
     align-items: center;
     position: relative;
-
+    
     input {
       flex: 1;
     }
@@ -66,9 +65,10 @@
       }
     }
   }
+}
   button[label="Se Connecter"] {
     margin: 1rem auto;
-
+    
     &:hover {
       color: c.$charcoal;
     }

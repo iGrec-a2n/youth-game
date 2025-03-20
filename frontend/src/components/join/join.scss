@@ -1,0 +1,6 @@
+@use "../../assets/styles/variable.scss" as v;
+
+.select-room-container {
+  background: v.$background-color;
+  color: v.$lavender-web;
+}
