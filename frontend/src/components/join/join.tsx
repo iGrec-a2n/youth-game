@@ -48,8 +48,8 @@ const JoinRoom: React.FC = () => {
       location="Paris" 
       score={12000} 
       rank={1} />
-      <h2>Rejoindre une salle</h2>
-      <button onClick={joinRoom}>Rejoindre</button>
+      <h2 className="select-room-title">Rejoindre une salle</h2>
+      <button className="select-room-button" onClick={joinRoom}>Rejoindre</button>
     </div>
   );
 };

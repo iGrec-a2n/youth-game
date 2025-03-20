@@ -24,7 +24,7 @@ export const Default: StoryObj<typeof Card> = {
         name: "Antoine",
         location: "Paris",
         score: 12000,
-        rank: 1,
+        rank: 56,
     }
 };
 export const User: StoryObj<typeof Card> = {
@@ -32,7 +32,7 @@ export const User: StoryObj<typeof Card> = {
         image: "https://images.pexels.com/photos/1441151/pexels-photo-1441151.jpeg?auto=compress&cs=tinysrgb&w=1200",
         name: "Yann",
         location: "munich",
-        score: 0,
-        rank: 100,
+        score: 600,
+        rank: 124,
     }
 };

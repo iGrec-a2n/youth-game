@@ -27,10 +27,10 @@ const Card: React.FC<CardProps> = ({ image, name, location, score, rank }) => {
             </div>
             <div className={styles.CardStats}>
                 <div className={styles.score}>
-                    <span className={styles.p}>{rank}</span>
+                    <span className={styles.p}>{rank}th</span>
                 </div>
                 <div className={styles.rank}>
-                    <span className={styles.p}>{score}th</span>
+                    <span className={styles.p}>{score} points</span>
                 </div>
             </div>
         </div>

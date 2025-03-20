@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import socket from "../../utils/socket";  
 import { useUser } from "../../utils/context/UserContext";
+import './Quiz.scss'
 // import AnswerTimer from "../../components/AnswerTimer/AnswerTimer";
 
 
@@ -126,7 +127,7 @@ const Quiz = () => {
           {questions[currentQuestion]?.options.map((option: string, index: number) => (
             <div key={index}>
               {/* <AnswerTimer duration={15} onTimeUp={() => Send_answer(option)} /> */}
-              <button type="button" onClick={() => Send_answer(option)}>
+              <button type="button" className="answer-button" onClick={() => Send_answer(option)}>
                 {option}
               </button>
             </div>
