@@ -3,7 +3,6 @@ eventlet.monkey_patch()
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, leave_room, emit
-import eventlet
 from werkzeug.security import check_password_hash, generate_password_hash
 from bd import db
 from bson import ObjectId

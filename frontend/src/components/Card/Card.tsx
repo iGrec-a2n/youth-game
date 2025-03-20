@@ -11,6 +11,8 @@ interface CardProps {
     onClick?: () => void;
 }
 
+
+
 const Card: React.FC<CardProps> = ({ image, name, location, score, rank }) => {
     return (
         <div className={styles.Card}>

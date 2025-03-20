@@ -4,16 +4,13 @@ import { InputPassword, InputText } from '../../components/input/Input';
 import "./Signin.scss"
 import { ButtonDecline } from '../../components/button/ButtonDecline';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../utils/context/UserContext';
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [message, setMessage] = useState<string>('');
-  // const [user, setUser] = useState<{
-  //   user_id: string,
-  //   username: string,
-  //   country: string
-  // }>()
+  const { user, setUser } = useUser(); 
 
   const navigate = useNavigate();
 
@@ -31,9 +28,12 @@ const Signin: React.FC = () => {
       });
 
       if (response.status === 200) {
+        const userData = response.data.data;
+        console.log("✅ Utilisateur connecté :", userData);
+        setUser(userData); // Met à jour le contexte utilisateur
         // Enregistrer l'ID de l'utilisateur dans localStorage
-        localStorage.setItem('user_id', response.data.user_id);
-
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log((localStorage.getItem("user")));
         // Rediriger vers la page du quiz
         navigate('/join');
       }
