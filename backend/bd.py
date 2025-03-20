@@ -16,78 +16,9 @@ try:
 except Exception as e:
     print(f"❌ Erreur de connexion : {e}")
 
-db["actualities"].insert_many(
-    [{
 
-  "titre": "L'UE renforce son aide aux Syriens",
-  "contenu": "L'Union européenne promet 2,5 milliards d'euros sous conditions pour soutenir le gouvernement transitoire en Syrie.",
-  "source": "Euronews",
-  "date": "2025-03-17"
-},
-{
 
-  "titre": "Nouvelle politique migratoire de l'UE",
-  "contenu": "La Commission européenne propose une révision de la directive 'retour' de 2008 pour mieux gérer les migrations.",
-  "source": "Amnesty International",
-  "date": "2025-03-16"
-},
-{
 
-  "titre": "Réforme des traités européens",
-  "contenu": "L'UE envisage des changements pour éviter les blocages politiques liés à la montée de l'extrême droite.",
-  "source": "Sauvons l'Europe",
-  "date": "2025-03-15"
-},
-{
-
-  "titre": "L'Allemagne investit dans l'IA",
-  "contenu": "Le gouvernement allemand annonce un plan de 1 milliard d'euros pour le développement de l'intelligence artificielle.",
-  "source": "Le Monde",
-  "date": "2025-03-14"
-},
-{
-
-  "titre": "Le Parlement européen débat sur l'énergie verte",
-  "contenu": "Les députés européens discutent d'un plan visant à réduire la dépendance au gaz russe.",
-  "source": "Euractiv",
-  "date": "2025-03-13"
-},
-{
-
-  "titre": "Accord commercial entre l'UE et le Mercosur",
-  "contenu": "Les négociations avancent pour un accord de libre-échange avec le Mercosur, malgré des critiques sur l'environnement.",
-  "source": "TF1 INFO",
-  "date": "2025-03-12"
-},
-{
-
-  "titre": "Crise agricole en France et en Espagne",
-  "contenu": "Les agriculteurs manifestent contre les nouvelles réglementations environnementales imposées par Bruxelles.",
-  "source": "Euronews",
-  "date": "2025-03-11"
-},
-{
-
-  "titre": "Changements dans la politique de défense européenne",
-  "contenu": "Les États membres discutent d'une armée commune pour renforcer la sécurité européenne.",
-  "source": "Bruxelles2",
-  "date": "2025-03-10"
-},
-{
-
-  "titre": "Sanctions contre la Russie",
-  "contenu": "L'UE prépare un nouveau paquet de sanctions économiques contre Moscou.",
-  "source": "Euractiv",
-  "date": "2025-03-09"
-},
-{
-
-  "titre": "Réforme du droit du travail en Italie",
-  "contenu": "Le gouvernement italien propose de nouvelles mesures pour assouplir le marché du travail.",
-  "source": "Le Monde",
-  "date": "2025-03-08"
-}]
-)
 # for i in db["Score"].find_one({"_id"})
 # db['rooms'].insert_one(
 #     {
