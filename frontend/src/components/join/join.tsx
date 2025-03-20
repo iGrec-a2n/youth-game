@@ -44,8 +44,8 @@ const JoinRoom: React.FC = () => {
   return (
     <div className="select-room-container">
       <Card image="https://images.pexels.com/photos/30736845/pexels-photo-30736845/free-photo-of-homme-pensif-appuye-sur-un-escalier-a-l-interieur.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load" 
-      name="Antoine" 
-      location="Paris" 
+      name={user?.username} 
+      location={user?.country} 
       score={12000} 
       rank={1} />
       <h2 className="select-room-title">Rejoindre une salle</h2>

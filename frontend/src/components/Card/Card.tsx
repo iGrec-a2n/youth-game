@@ -4,8 +4,8 @@ import styles from "./Card.module.scss"
 
 interface CardProps {
     image: string;
-    name: string;
-    location: string;
+    name?: string;
+    location?: string;
     score: number;
     rank: number;
     onClick?: () => void;
