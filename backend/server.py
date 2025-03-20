@@ -136,7 +136,7 @@ def user_ranking():
                     "pseudo": user_data["username"],
                     "country": user_data["country"],
                     "score": score,
-                    # "streak" : user_data["streak"]
+                    "streak" : user_data["streak"]
                 }
 
                 ranking_list.append(user_info)
@@ -157,8 +157,8 @@ def user_ranking():
         return jsonify({
             "user_score": user_score,
             "user_ranking": user_ranking,
-            "ranking": ranking_list,
-            # "streak" : user_data["streak"]
+            # "ranking": ranking_list,
+            "streak" : user_data["streak"]
 
         }), 200
 

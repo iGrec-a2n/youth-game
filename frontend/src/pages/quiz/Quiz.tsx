@@ -24,9 +24,9 @@ const Quiz = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [player, setPlayer] = useState<string>('');
   const [isFinished, setIsFinished] = useState(false); 
-  const [finalScores, setFinalScores] = useState<PlayerScore[]>([]); 
-  const {user} = useUser();
-
+  const [finalScores, setFinalScores] = useState<PlayerScore[]>([]);
+  const [countdown, setCountdown] = useState<number | null>(null); 
+  const { user } = useUser();
   useEffect(() => {
     socket.on("quiz_started", (data: { questions: Question[] }) => {
       if (data.questions && data.questions.length > 0) {
@@ -37,7 +37,9 @@ const Quiz = () => {
         console.log("Aucune question reçue.");
       }
     });
-  
+    socket.on("countdown", (data) => {
+      setCountdown(data.count);
+    });
     socket.on("score_updated", (data) => {
       if (data.user_id === user?.user_id) {
         console.log(data.new_score);
@@ -66,6 +68,7 @@ const Quiz = () => {
       socket.off("error");
       socket.off("score_updated");
       socket.off("end_room");
+      socket.off("countdown");
     };
   }, []);
   
@@ -105,7 +108,7 @@ const Quiz = () => {
       <h1>Joueur: {player}</h1>
       <h1>Score: {score}</h1>
       
-      {isFinished ? (
+      {isFinished && countdown !== null && countdown > 0 ? (
         <div>
           <h2>🎉 Quiz terminé ! 🎉</h2>
           <h3>🏆 Classement des joueurs :</h3>
@@ -130,7 +133,8 @@ const Quiz = () => {
           ))}
         </div>
       ) : (
-        <h2>En attente du démarrage...</h2>
+        <h2>Le jeu commence dans {countdown}...</h2>
+
       )}
     </div>
   );
