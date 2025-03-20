@@ -75,10 +75,19 @@ def signIN():
     existing_user = users.find_one({"email": email})
 
     if existing_user and check_password_hash(existing_user["password"], password):
-        user_id = str(existing_user["_id"])
-        return jsonify({"message": "Welcome", "user_id": user_id}), 200
+        # Créer un dictionnaire avec uniquement les champs souhaités
+        response_data = {
+            "user_id": str(existing_user["_id"]),  # Conversion de _id en string
+            "username": existing_user["username"],
+            "country": existing_user["country"]
+        }
+        
+        # Renvoie la réponse avec uniquement ces informations
+        return jsonify({"message": "Welcome", "data": response_data}), 200
     else:
         return jsonify({"message": "User not found"}), 400
+
+
 
 # Route pour créer une room avec des questions
 @app.route('/api/create_room', methods=["POST"])
@@ -466,23 +475,72 @@ def player_finished(data):
         print("###########  Joueurs fini")
         end_room({"room_code": room_code})  # Déclencher la fin du jeu
 
+
 @socketio.on('end_room')
 def end_room(data):
     room_code = data["room_code"]
-
+    
     # Vérifier si la room existe
     room = rooms.find_one({"room_code": room_code})
     if not room:
         emit("error", {"message": "Room not found"})
         return
 
-    # Récupérer les scores des joueurs
     players = room["players"]
-    player_scores = [{"username": p["username"], "score": p["score"]} for p in players]
+    current_time = time.time()  
+    current_day = int(current_time // 86400)  # Nombre de jours écoulés depuis epoch
 
-    # Émettre l'événement de fin de jeu à tous les joueurs
+    for player in players:
+        username = player["username"]
+        player_score = player["score"]
+        bonus = 0  
+
+        # Récupérer les infos du joueur dans la collection 'users'
+        user = users.find_one({"username": username})
+        if user:
+            user_id = user["_id"]
+            last_date = float(user.get("last_date", 0))  # Si non défini, 0
+            last_bonus = float(user.get("last_bonus_timestamp", 0))  # Si non défini, 0
+
+            # Convertir en jours
+            last_played_day = int(last_date // 86400)
+            last_bonus_day = int(last_bonus // 86400)
+
+            # Vérifier si le joueur a joué hier et n'a pas encore reçu de bonus aujourd'hui
+            if last_played_day == current_day - 1 and last_bonus_day != current_day:
+                time_diff = current_time - last_date
+                bonus = max(1, 10 - int(time_diff // 3600))  # Calcul du bonus
+                player_score += bonus
+                print(f"🎯 Bonus appliqué pour {username}: +{bonus} points !")
+
+                # Enregistrer la date du dernier bonus donné
+                users.update_one(
+                    {"_id": user_id},
+                    {"$set": {"last_bonus_timestamp": current_time}}
+                )
+
+            # Mise à jour de la dernière date de jeu
+            users.update_one({"_id": user_id}, {"$set": {"last_date": current_time}})
+
+            # Mettre à jour ou insérer le score dans 'user_scores'
+            score_entry = user_scores.find_one({"user_id": user_id})
+            if score_entry:
+                new_score = score_entry["score"] + bonus  
+                user_scores.update_one({"_id": score_entry["_id"]}, {"$set": {"score": new_score}})
+                print(f"🔹 Score mis à jour pour {username}: {new_score}")
+            else:
+                user_scores.insert_one({"user_id": user_id, "score": player_score})
+                print(f"✅ Score ajouté pour {username}: {player_score}")
+
+    # Réinitialiser la salle après la fin de la partie
+    db['rooms'].update_one({"room_code": room_code}, {"$set": {"players": [], "status": "Wait"}})
+
+    # Envoyer les scores finaux
+    player_scores = [{"username": p["username"], "score": p["score"]} for p in players]
     emit("end_room", {"player_scores": player_scores}, room=room_code)
 
     print(f"🏁 Fin de la room {room_code} - Scores : {player_scores}")
+
+
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)

@@ -1,19 +1,33 @@
+#b64tiqrR884WKtob yzZMSkztF3RQ_h8
 from pymongo import MongoClient
-import requests
+# Remplace par ton URI Atlas
+MONGO_URI = "mongodb+srv://GROUPE18:aegWIFqdTChccdum@cluster0.bsoht.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
-server = "34.251.25.31" # or localhost
-username = "ortecusdb"
-password = "passdb*2019#"
-port = 27017
+# Connexion au cluster
+client = MongoClient(MONGO_URI)
 
-if server == 'localhost':
-    client = MongoClient("mongodb://localhost", username=username,password=password, port=port)
-else:
-    client = MongoClient(server, username=username,password=password, port=port)
-# creation DB
-client = MongoClient("localhost:27017")
-db = client["HACKATON_Hetic"]
-roomsDb = db["rooms"].find()
+# Création (ou accès) à la base de données
+db = client["HACKATHON_HETIC"]
+
+# Vérification de la connexion
+try:
+    client.admin.command('ping')
+    print("✅ Connexion réussie à MongoDB Atlas !")
+except Exception as e:
+    print(f"❌ Erreur de connexion : {e}")
+
+# for i in db["Score"].find_one({"_id"})
+# db['rooms'].insert_one(
+#     {
+
+#   "admin_id": "1234567890",
+#   "room_code": "VGQZCN",
+#   "players": [],
+#   "status": "Wait"
+# }
+# )
+# client = MongoClient("localhost:27017")
+# roomsDb = db["rooms"].find()
 # for room in roomsDb:
 #     print(room)
 
@@ -28,50 +42,15 @@ roomsDb = db["rooms"].find()
 # )
 # print("Les joueurs ont été supprimés.")
 
-
+# for i in db["questions"].find() :
+#     print(i)
 # users = db["Users"]
 # user_scores = db["Score"]
 # # creation collection
-# db["rooms"].insert_one(
-#   {
-
-#   "admin_id": "1234567890",
-#   "room_code": "VGQZCN",
-#   "questions": [
-#     {
-#       "question": "TEST",
-#       "question_id": "qanm6kdi",
-#       "type": "QCM",
-#       "options": [
-#         "A",
-#         "B",
-#         "C",
-#         "D"
-#       ],
-#       "correct_answer": "A",
-#       "points": 34
-#     },
-#     {
-#       "question": "TEST2",
-#       "question_id": "qb3gxf6k",
-#       "type": "QCM",
-#       "options": [
-#         "E",
-#         "F",
-#         "G",
-#         "H"
-#       ],
-#       "correct_answer": "G",
-#       "points": 10
-#     }
-#   ],
-#   "statut": "Wait",
-#   "players": [],
-#   "status": "In progress"
-# }
-# )
+# # db["rooms"].insert_one(
+# #   {
 # print('fait')
-# db.questions.insert_many(
+# db["questions"].insert_many(
 # [
 #   {
 #     "type": "multipleChoice",
@@ -111,7 +90,17 @@ roomsDb = db["rooms"].find()
 # ]
 
 # )
+
 # print("C'est fait")
+
+#   "admin_id": "1234567890",
+#   "room_code": "VGQZCN",
+
+#   "statut": "Wait",
+#   "players": [],
+#   "status": "In progress"
+# }
+# )
 # # qcm = db.Questions.find({"type":"multipleChoice"})
 # # for i in qcm:
 # #   print(i)
