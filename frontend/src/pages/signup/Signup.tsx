@@ -4,7 +4,8 @@ import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { InputPassword, InputText } from "../../components/input/Input";
-import "./Singup.scss"
+import euCountries from "../../components/euCountries/EUCountries"; 
+import "./Singup.scss";
 
 // Schéma de validation avec Zod
 const signupSchema = z.object({
@@ -76,8 +77,16 @@ const Signup: React.FC = () => {
         <InputPassword {...register("confirmPassword")} placeholder="Confirmer le mot de passe" required />
         {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
 
-        <label>Pays :</label>
-        <InputText {...register("country")} placeholder="Pays" type="text" required />
+        <div className="relative">
+          <select {...register("country")} className="w-full p-2 border rounded">
+            <option value="">Sélectionnez votre pays</option>
+            {euCountries.map((country) => (
+              <option key={country.code} value={country.name}>
+                {country.name}
+              </option>
+            ))}
+          </select>
+        </div>
         {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
 
         <label>Date de naissance :</label>

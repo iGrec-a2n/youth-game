@@ -8,6 +8,11 @@ const Signin: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [message, setMessage] = useState<string>('');
+  const [user, setUser] = useState<{
+    user_id: string,
+    username: string,
+    country: string
+  }>()
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -24,11 +29,13 @@ const Signin: React.FC = () => {
 
       if (response.status === 200) {
         // Enregistrer l'ID de l'utilisateur dans localStorage
-        localStorage.setItem('user_id', response.data.user_id);
-        console.log("✅ User ID enregistré:", response.data.user_id);
+        console.log(response.data.data);
+        setUser(() => response.data.data);
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log("✅ User ID enregistré:", user?.user_id);
 
         // Rediriger vers la page du quiz
-        window.location.href = '/';
+        // window.location.href = '/';
       }
     } catch (error: unknown) {
       const axiosError = error as AxiosError;
