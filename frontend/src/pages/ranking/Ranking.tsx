@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
+import {useUser} from "../../utils/context/UserContext";
 
 interface UserRanking {
   country: string,
@@ -15,17 +16,14 @@ const Ranking: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [viewNational, setViewNational] = useState<boolean>(true);
-  // On défini manuellement le Pays
-  const [user_country, setUser_country] = useState<string>("France")
-
+  const {user} = useUser()
 
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        localStorage.setItem("user_country", user_country)
         setLoading(true);
         setError("");
-        const storedUserCountry = localStorage.getItem("user_country");
+        const storedUserCountry = user?.country;
         const url = viewNational && storedUserCountry 
           ? `http://localhost:5000/ranking?country=${storedUserCountry}`
           : "http://localhost:5000/ranking";
@@ -43,7 +41,7 @@ const Ranking: React.FC = () => {
     };
     
     fetchRanking();
-  }, [viewNational]);
+  }, [viewNational, user]);
 
   return (
     <>
