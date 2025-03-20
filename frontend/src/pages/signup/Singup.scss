@@ -3,6 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
   max-height: 100vh;
   background-color: $background-color;
   font-family: $font-noto;
@@ -11,7 +12,7 @@
     background-color: $form-background;
     padding: 2rem;
     border-radius: $border-radius;
-    box-shadow: 0 4px 6px ;
+    box-shadow: 0 4px 6px $shadow-light;
     width: 100%;
     max-width: 400px;
 
@@ -21,7 +22,7 @@
       font-size: 1.8rem;
       font-stretch: expanded;
       font-weight: 600;
-      margin-bottom: 1.5rem;
+      margin: 1.3rem 0 0.3rem;
     }
 
     label {
@@ -45,7 +46,7 @@
       }
     }
 
-    .input-password {
+    input[type="password"] {
       display: flex;
       align-items: center;
       position: relative;
@@ -62,10 +63,11 @@
         right: 10px;
         font-size: 1.2rem;
         color: $slate-gray;
-        transition: color 0.3s ease;
+        transform: scale(1);
+        transition: transfrom 0.3s ease;
 
         &:hover {
-          color: $charcoal;
+          transform: scale(1.1);
         }
       }
     }

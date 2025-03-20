@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { InputPassword, InputText } from '../../components/input/Input';
+import "./Signin.scss"
+import { ButtonDecline } from '../../components/button/ButtonDecline';
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -36,9 +38,10 @@ const Signin: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Connexion</h2>
+    <div className='signin-container'>
       <form onSubmit={handleLogin}>
+        <h2>Connexion</h2>
+        <label htmlFor="email">Email: </label>
         <InputText
           type="email"
           name='email'
@@ -47,6 +50,7 @@ const Signin: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        <label htmlFor="password">Mot de passe: </label>
         <InputPassword
           placeholder="Mot de passe"
           value={password}
@@ -58,7 +62,8 @@ const Signin: React.FC = () => {
           }}
           required
         />
-        <button type="submit">Se connecter</button>
+        {/* <button className='button' type="submit">Se connecter</button> */}
+          <ButtonDecline type='primary' label='Se Connecter' />
       </form>
       {message && <p>{message}</p>}
     </div>
