@@ -105,27 +105,27 @@ const Quiz = () => {
   };
 
   return (
-    <div>
+    <div className="quiz-container">
       <h1>Joueur: {player}</h1>
       <h1>Score: {score}</h1>
       
       {isFinished && countdown !== null && countdown > 0 ? (
-        <div>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3rem'}}>
           <h2>🎉 Quiz terminé ! 🎉</h2>
           <h3>🏆 Classement des joueurs :</h3>
-          <ul>
+          <ul style={{listStyleType: 'none', display: 'flex', flexDirection: 'column', gap: '1rem'}}>
             {finalScores.map((p, index) => (
-              <li key={index}>
+              <li style={{fontSize: '1.5rem', fontWeight: 'bold'}} key={index}>
                 {p.username} - {p.score} points
               </li>
             ))}
           </ul>
         </div>
       ) : isStarted ? (
-        <div>
+        <div className="quiz-container">
           <h3>{questions[currentQuestion]?.question}</h3>
           {questions[currentQuestion]?.options.map((option: string, index: number) => (
-            <div key={index}>
+            <div className="answer-button-container" key={index}>
               {/* <AnswerTimer duration={15} onTimeUp={() => Send_answer(option)} /> */}
               <button type="button" className="answer-button" onClick={() => Send_answer(option)}>
                 {option}
