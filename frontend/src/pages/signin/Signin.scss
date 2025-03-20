@@ -1,0 +1,76 @@
+@import '../../assets/styles/variable.scss';
+.signin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  max-height: 100vh;
+  background-color: $background-color;
+  font-family: $font-noto;
+  
+  form {
+    background-color: $form-background;
+    padding: 2rem;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 6px $shadow-light;
+    width: 100%;
+    max-width: 400px;
+    
+      h2 {
+        font-family: $font-syncopate;
+        text-align: center;
+        font-size: 1.8rem;
+        font-stretch: expanded;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+  }
+  label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 1.3rem 0 0.3rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: $primary-color;
+      outline: none;
+    }
+  }
+
+  input[type="password"] {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    input {
+      flex: 1;
+    }
+    button[type="button"] {
+      position: absolute;
+      right: 10px;
+      font-size: 1.2rem;
+      color: $slate-gray;
+      transition: transfrom 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+  button[label="Se Connecter"] {
+    margin: 1rem auto;
+
+    &:hover {
+      color: $charcoal;
+    }
+  }
+}

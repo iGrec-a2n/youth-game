@@ -8,6 +8,7 @@ import Admin from "../pages/admin/Admin";
 import Signin from "../pages/signin/Signin";
 import Signup from "../pages/signup/Signup";
 import JoinRoom from "../components/join/join";
+import Ranking from "../pages/ranking/Ranking";
 
 const mobileRouter = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const mobileRouter = createBrowserRouter([
       { path:"/Signup", element: <Signup />},
       { path:"/join", element: <JoinRoom />},
       { path: "/Quiz", element: <Quiz /> },
+      { path: "/Ranking", element: <Ranking /> },
     ],
   },
   { path: "*", element: <Notfound /> },

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { InputPassword, InputText } from '../../components/input/Input';
+import "./Signin.scss"
+import { ButtonDecline } from '../../components/button/ButtonDecline';
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -27,31 +30,40 @@ const Signin: React.FC = () => {
         // Rediriger vers la page du quiz
         window.location.href = '/';
       }
-    } catch (error: any) {
-      console.error("❌ Erreur lors de la connexion :", error);
-      setMessage(error.response?.data?.message || "Erreur de connexion. Veuillez réessayer.");
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError;
+      console.error("❌ Erreur lors de la connexion :", axiosError);
+      setMessage((axiosError.response?.data as { message: string })?.message || "Erreur de connexion. Veuillez réessayer.");
     }
   };
 
   return (
-    <div>
-      <h2>Connexion</h2>
+    <div className='signin-container'>
       <form onSubmit={handleLogin}>
-        <input
+        <h2>Connexion</h2>
+        <label htmlFor="email">Email: </label>
+        <InputText
           type="email"
+          name='email'
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
+        <label htmlFor="password">Mot de passe: </label>
+        <InputPassword
           placeholder="Mot de passe"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          name='password'
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target) {
+              setPassword(e.target.value);
+            }
+          }}
           required
         />
-        <button type="submit">Se connecter</button>
+        {/* <button className='button' type="submit">Se connecter</button> */}
+          <ButtonDecline type='primary' label='Se Connecter' />
       </form>
       {message && <p>{message}</p>}
     </div>
