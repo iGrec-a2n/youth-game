@@ -3,16 +3,19 @@ import axios, { AxiosError } from 'axios';
 import { InputPassword, InputText } from '../../components/input/Input';
 import "./Signin.scss"
 import { ButtonDecline } from '../../components/button/ButtonDecline';
+import { useNavigate } from 'react-router-dom';
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [message, setMessage] = useState<string>('');
-  const [user, setUser] = useState<{
-    user_id: string,
-    username: string,
-    country: string
-  }>()
+  // const [user, setUser] = useState<{
+  //   user_id: string,
+  //   username: string,
+  //   country: string
+  // }>()
+
+  const navigate = useNavigate();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -29,13 +32,10 @@ const Signin: React.FC = () => {
 
       if (response.status === 200) {
         // Enregistrer l'ID de l'utilisateur dans localStorage
-        console.log(response.data.data);
-        setUser(() => response.data.data);
-        localStorage.setItem('user', JSON.stringify(user));
-        console.log("✅ User ID enregistré:", user?.user_id);
+        localStorage.setItem('user', JSON.stringify(response.data.data));
 
         // Rediriger vers la page du quiz
-        // window.location.href = '/';
+        navigate('/join');
       }
     } catch (error: unknown) {
       const axiosError = error as AxiosError;
