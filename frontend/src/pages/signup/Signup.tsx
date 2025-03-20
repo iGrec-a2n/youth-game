@@ -4,6 +4,7 @@ import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { InputPassword, InputText } from "../../components/input/Input";
+import "./Singup.scss"
 
 // Schéma de validation avec Zod
 const signupSchema = z.object({
@@ -47,7 +48,7 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="signup-container">
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-semibold text-center mb-4">Inscription</h2>
 
