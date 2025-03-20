@@ -54,7 +54,7 @@ export const InputPassword = forwardRef<HTMLInputElement, inputPasswordProps>(
       <button
         type="button"
         onClick={() => setShowPassword(!showPassword)}
-        style={{ marginLeft: '8px', cursor: 'pointer' }}
+        style={{ marginRight: '8px', cursor: 'pointer',position:'absolute',right:'0', background:'none',border:'none' }}
       >
         {showPassword ? '🙈' : '👁️'}
       </button>
