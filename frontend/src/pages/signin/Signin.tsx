@@ -5,7 +5,7 @@ import "./Signin.scss"
 import { ButtonDecline } from '../../components/button/ButtonDecline';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../utils/context/UserContext';
-import Card from '../../components/Card/Card';
+
 const Signin: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -18,7 +18,7 @@ const Signin: React.FC = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('https://8cb7-2a04-cec0-193b-e9df-e987-719b-684e-2a4a.ngrok-free.app/api/login', {
+      const response = await axios.post('https://16d9-2a04-cec0-1931-b82e-818a-a755-3d6a-a343.ngrok-free.app//api/login', {
         email,
         password,
       }, {
@@ -69,9 +69,9 @@ const Signin: React.FC = () => {
           required
         />
         {/* <button className='button' type="submit">Se connecter</button> */}
-          <ButtonDecline type='primary' label='Se Connecter' />
+          <ButtonDecline type='primary' className='connexion' label='Se Connecter' />
       </form>
-      {message && <p>{message}</p>}
+      {message && <p className='error-message'>{message}</p>}
       
     </div>
   );

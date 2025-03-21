@@ -1,8 +1,10 @@
+@use "../../assets/styles/variable.scss" as v;
 .footer{
     overflow-y: scroll;
     width: 100%;
     height: 50px;
-    background-color: #fff;
+    background-color: v.$lavender-web-hover;
+    box-shadow: 0 -4px 6px v.$shadow-light;
     padding: 20px 10px;
 }
 li{
@@ -31,4 +33,11 @@ li{
     width: 100%;
     height: 100%;
     
+}
+.navlink-active {
+    background-color: v.$primary-color; // Change la couleur de fond
+    color: v.$citrine; // Texte en blanc
+    font-weight: bold;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }

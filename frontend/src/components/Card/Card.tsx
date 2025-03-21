@@ -6,7 +6,7 @@ interface CardProps {
     image: string;
     name?: string;
     location?: string;
-    score: number;
+    score?: number;
     rank: number;
     onClick?: () => void;
 }

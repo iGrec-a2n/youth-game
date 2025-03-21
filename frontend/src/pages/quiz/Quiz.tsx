@@ -17,7 +17,7 @@ interface PlayerScore {
   score: number;
 }
 
-const Quiz = () => {
+const Quiz:React.FC = () => {
   const  roomCode  = "VGQZCN";
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);

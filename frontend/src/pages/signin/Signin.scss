@@ -2,14 +2,16 @@
 .signin-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 80vh;
+  height: (calc(100vh - 110px));
   max-height: 100vh;
   background-color: c.$background-color;
   font-family: c.$font-noto;
   
   form {
-    background-color: c.$form-background;
+    // background-color: c.$form-background;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     padding: 2rem;
     border-radius: c.$border-radius;
     box-shadow: 0 4px 6px c.$shadow-light;
@@ -28,7 +30,7 @@
         display: block;
         font-size: 0.9rem;
         font-weight: 600;
-        margin: 1.5rem 0;
+        margin: 1.5rem 0 .5rem;
       }
   
       input {
@@ -66,11 +68,16 @@
     }
   }
 }
-  button[label="Se Connecter"] {
-    margin: 1rem auto;
+  .connexion {
+    margin: 2.5rem auto;
+    width: 100%;
     
     &:hover {
       color: c.$charcoal;
     }
+  }
+
+  .error-message: {
+
   }
 }

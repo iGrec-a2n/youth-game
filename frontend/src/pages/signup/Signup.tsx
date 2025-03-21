@@ -36,7 +36,7 @@ const Signup: React.FC = () => {
 
   const onSubmit = async (data: SignupFormInputs) => {
     try {
-      const response = await axios.post("https://8cb7-2a04-cec0-193b-e9df-e987-719b-684e-2a4a.ngrok-free.app/api/register", data, {
+      const response = await axios.post("https://16d9-2a04-cec0-1931-b82e-818a-a755-3d6a-a343.ngrok-free.app//api/register", data, {
         headers: { "Content-Type": "application/json" },
       });
       alert(response.data.message);

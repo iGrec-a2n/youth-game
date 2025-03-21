@@ -5,7 +5,7 @@ export const Navbar: React.FC=()=>{
   return(
     <div className='navbar'>
     <span className='logo-style'>
-      28th voice
+      <img src="../../assets/icons/logoEurope.png" alt="" />
     </span>
     </div>
   )

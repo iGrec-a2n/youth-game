@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://8cb7-2a04-cec0-193b-e9df-e987-719b-684e-2a4a.ngrok-free.app", {
+const socket = io("https://16d9-2a04-cec0-1931-b82e-818a-a755-3d6a-a343.ngrok-free.app/", {
   transports: ["websocket", "polling"],  // Mode de transport
   reconnectionAttempts: 5,               // Limite les tentatives de reconnexion
   reconnectionDelay: 1000,               // Délai entre les tentatives de reconnexion
