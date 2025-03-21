@@ -18,7 +18,7 @@ const Signin: React.FC = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('https://16d9-2a04-cec0-1931-b82e-818a-a755-3d6a-a343.ngrok-free.app//api/login', {
+      const response = await axios.post('https://16d9-2a04-cec0-1931-b82e-818a-a755-3d6a-a343.ngrok-free.app/api/login', {
         email,
         password,
       }, {

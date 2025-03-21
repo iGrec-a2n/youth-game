@@ -17,7 +17,7 @@ const JoinRoom: React.FC = () => {
     const fetchScore = async () => {
       if (user && user.user_id) {
         try {
-          const response = await axios.get(`https://16d9-2a04-cec0-1931-b82e-818a-a755-3d6a-a343.ngrok-free.app//user_ranking?user_id=${user.user_id}`);
+          const response = await axios.get(`https://16d9-2a04-cec0-1931-b82e-818a-a755-3d6a-a343.ngrok-free.app/user_ranking?user_id=${user.user_id}`);
           console.log(response.data);
           setScore(response.data.score);
         } catch (error) {
